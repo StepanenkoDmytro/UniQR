@@ -3,11 +3,13 @@ package com.uniqr.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "QRs")
+@Table(name = "qrs")
 @Data
 @Setter
 @Getter
@@ -19,8 +21,10 @@ public class QR {
     private String session;
     @Column(name = "created")
     private Date created;
-    @Column(name = "dates", columnDefinition = "json")
-    private String dates;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
+            CascadeType.REFRESH, CascadeType.MERGE},
+            mappedBy = "qr")
+    private List<QrChecks> dates;
 
     public QR(String session) {
         this.session = session;
@@ -31,5 +35,14 @@ public class QR {
     public QR() {
         this.created = new Date();
         this.id = UUID.randomUUID().toString();
+    }
+
+    public void addCheckDate(Date date) {
+        if(dates == null) {
+            dates = new ArrayList<>();
+        }
+        QrChecks qrChecks = new QrChecks(date);
+        qrChecks.setQr(this.id);
+        dates.add(qrChecks);
     }
 }

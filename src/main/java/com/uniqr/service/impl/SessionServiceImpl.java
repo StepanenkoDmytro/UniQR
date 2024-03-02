@@ -32,7 +32,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public Session createSession(SessionDTO sessionDTO) {
         Session session = SessionDTO.mapToSession(sessionDTO);
-        List<QR> generateQRs = generateQRs(session.getId() ,sessionDTO.getAmount());
+        List<QR> generateQRs = generateQRs(session.getId(), sessionDTO.getAmount());
         session.setQrs(generateQRs);
 
         sessionRepository.save(session);

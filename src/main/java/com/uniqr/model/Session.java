@@ -20,12 +20,12 @@ import java.util.UUID;
 public class Session {
     @Id
     private String id;
-
     @Column(name = "dataTime")
     private Date dataTime;
-
     @Column(name = "amount_qrs")
     private Long amountQRs;
+    @Column(name = "description")
+    private String desc;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.REFRESH, CascadeType.MERGE},
@@ -33,10 +33,11 @@ public class Session {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<QR> qrs = new ArrayList<>();
 
-    public Session(Long amount, Date date) {
+    public Session(Long amount, Date date, String desc) {
         this.amountQRs = amount;
         this.dataTime = date;
         this.id = UUID.randomUUID().toString();
+        this.desc = desc;
     }
 
     public Session(Long amount, Date date, List<QR> qrs) {

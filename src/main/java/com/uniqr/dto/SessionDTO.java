@@ -16,14 +16,16 @@ public class SessionDTO {
     private String id;
     private Long amount;
     private Date crated;
-    private List<String> qrDTOs;
+    private String desc;
+    private List<String> qrs;
 
     public static Session mapToSession(SessionDTO sessionDTO) {
         Date date = new Date();
 
         return new Session(
                 sessionDTO.getAmount(),
-                date
+                date,
+                sessionDTO.getDesc()
         );
     }
 
@@ -34,6 +36,7 @@ public class SessionDTO {
                 session.getId(),
                 session.getAmountQRs(),
                 session.getDataTime(),
+                session.getDesc(),
                 collect
         );
     }
