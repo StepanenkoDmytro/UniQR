@@ -3,32 +3,33 @@ package com.uniqr.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+import java.util.UUID;
+
 @Entity
 @Table(name = "QRs")
 @Data
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class QR {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "qr")
-    private String qr;
-
+    private String id;
     @Column(name = "session_id")
-    private Long session;
+    private String session;
+    @Column(name = "created")
+    private Date created;
+    @Column(name = "dates", columnDefinition = "json")
+    private String dates;
 
-    public QR(String qr) {
-        this.qr = qr;
+    public QR(String session) {
+        this.session = session;
+        this.created = new Date();
+        this.id = UUID.randomUUID().toString();
     }
 
-//    public QR(String qr, Session session) {
-//        this.qr = qr;
-//        session.addQr(this);
-//        this.session = session;
-//    }
+    public QR() {
+        this.created = new Date();
+        this.id = UUID.randomUUID().toString();
+    }
 }

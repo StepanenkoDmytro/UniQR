@@ -26,36 +26,29 @@ public class SessionController {
 
     @PostMapping("/createSession")
     public ResponseEntity<?> createSession(@RequestBody SessionDTO sessionDTo) {
-        List<String> qrDTOsList = sessionDTo.getQrDTOs();
-        if(qrDTOsList.size() != sessionDTo.getAmount()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    "The number of QR codes does not match the specified amount."
-            );
-        }
-        Session session = sessionService.createSession(sessionDTo);
-        System.out.println("controller:" + session);
 
+        Session session = sessionService.createSession(sessionDTo);
 
         return ResponseEntity.ok(session);
     }
 
-    @PostMapping("/saveQRs/{id}")
-    public ResponseEntity<?> savedQRs(@PathVariable Long id, @RequestBody Test qrsDto) {
-        Session session = sessionService.getSession(id);
-        List<QR> qrs = qrsDto.getQrDTOs().stream()
-                .map(qrDTO -> new QR(qrDTO))
-                .collect(Collectors.toList());
-        System.out.println("saveQRs:" + qrs);
-
-        // Додайте QR до сесії та встановіть сесію для кожного QR
-        session.addQRs(qrs);
-
-        // Збережіть сесію зі зв'язаними QR-кодами
-        sessionService.saveSession(session);
-//        Session savedSession =
-        System.out.println("saveQRs:" + session);
-        return ResponseEntity.ok(SessionDTO.mapToSessionDTO(session));
-    }
+//    @PostMapping("/saveQRs/{id}")
+//    public ResponseEntity<?> savedQRs(@PathVariable Long id, @RequestBody Test qrsDto) {
+//        Session session = sessionService.getSession(id);
+//        List<QR> qrs = qrsDto.getQrDTOs().stream()
+//                .map(qrDTO -> new QR(qrDTO))
+//                .collect(Collectors.toList());
+//        System.out.println("saveQRs:" + qrs);
+//
+//        // Додайте QR до сесії та встановіть сесію для кожного QR
+//        session.addQRs(qrs);
+//
+//        // Збережіть сесію зі зв'язаними QR-кодами
+//        sessionService.saveSession(session);
+////        Session savedSession =
+//        System.out.println("saveQRs:" + session);
+//        return ResponseEntity.ok(SessionDTO.mapToSessionDTO(session));
+//    }
 
     @GetMapping("/getSessions")
     public ResponseEntity getSessions() {
@@ -63,7 +56,7 @@ public class SessionController {
     }
 
     @GetMapping("/getSessions/{id}")
-    public ResponseEntity getSessionsById(@PathVariable Long id) {
+    public ResponseEntity getSessionsById(@PathVariable String id) {
         return ResponseEntity.ok(sessionService.getSessionDTO(id));
     }
 }

@@ -8,22 +8,18 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class SessionDTO {
-    private Long id;
+    private String id;
     private Long amount;
+    private Date crated;
     private List<String> qrDTOs;
 
     public static Session mapToSession(SessionDTO sessionDTO) {
         Date date = new Date();
-
-
-//        qrs.forEach(qr -> qr.setSession(session));
-//        session.addQRs(qrs);
 
         return new Session(
                 sessionDTO.getAmount(),
@@ -32,13 +28,12 @@ public class SessionDTO {
     }
 
     public static SessionDTO mapToSessionDTO(Session session) {
-        List<String> collect = session.getQrs().stream().map(qr -> qr.getQr()).collect(Collectors.toList());
-//        qrs.forEach(qr -> qr.setSession(session));
-//        session.addQRs(qrs);
+        List<String> collect = session.getQrs().stream().map(QR::getId).toList();
 
         return new SessionDTO(
                 session.getId(),
                 session.getAmountQRs(),
+                session.getDataTime(),
                 collect
         );
     }
