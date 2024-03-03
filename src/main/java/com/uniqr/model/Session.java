@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "session")
+@Table(name = "sessions")
 @Data
 @Getter
 @Setter
@@ -36,15 +36,10 @@ public class Session {
     private List<QR> qrs = new ArrayList<>();
 
     public Session(String name ,Long amount, Date date, String desc) {
+        this.name = name;
         this.amountQRs = amount;
         this.created = date;
         this.id = UUID.randomUUID().toString();
         this.desc = desc;
-    }
-
-    public Session(Long amount, Date date, List<QR> qrs) {
-        this.amountQRs = amount;
-        this.created = date;
-        this.qrs = qrs;
     }
 }
