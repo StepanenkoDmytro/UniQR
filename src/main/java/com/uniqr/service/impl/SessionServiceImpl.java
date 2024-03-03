@@ -1,6 +1,8 @@
 package com.uniqr.service.impl;
 
 import com.uniqr.dto.SessionDTO;
+import com.uniqr.dto.SessionFullDTO;
+import com.uniqr.dto.SessionShortDTO;
 import com.uniqr.model.QR;
 import com.uniqr.model.Session;
 import com.uniqr.repository.SessionRepository;
@@ -25,18 +27,18 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public List<SessionDTO> getListSessions() {
-        return sessionRepository.findAll().stream().map(SessionDTO::mapToSessionDTO).collect(Collectors.toList());
+    public List<SessionShortDTO> getListSessions() {
+        return sessionRepository.findAll().stream().map(SessionShortDTO::mapToShortDTO).toList();
     }
 
     @Override
-    public Session createSession(SessionDTO sessionDTO) {
+    public SessionFullDTO createSession(SessionDTO sessionDTO) {
         Session session = SessionDTO.mapToSession(sessionDTO);
         List<QR> generateQRs = generateQRs(session.getId(), sessionDTO.getAmount());
         session.setQrs(generateQRs);
 
         sessionRepository.save(session);
-        return session;
+        return SessionFullDTO.mapToSessionDTO(session);
     }
 
     @Override

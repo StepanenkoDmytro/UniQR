@@ -20,8 +20,10 @@ import java.util.UUID;
 public class Session {
     @Id
     private String id;
-    @Column(name = "dataTime")
-    private Date dataTime;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "created")
+    private Date created;
     @Column(name = "amount_qrs")
     private Long amountQRs;
     @Column(name = "description")
@@ -33,17 +35,16 @@ public class Session {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<QR> qrs = new ArrayList<>();
 
-    public Session(Long amount, Date date, String desc) {
+    public Session(String name ,Long amount, Date date, String desc) {
         this.amountQRs = amount;
-        this.dataTime = date;
+        this.created = date;
         this.id = UUID.randomUUID().toString();
         this.desc = desc;
     }
 
     public Session(Long amount, Date date, List<QR> qrs) {
         this.amountQRs = amount;
-        this.dataTime = date;
-
+        this.created = date;
         this.qrs = qrs;
     }
 }

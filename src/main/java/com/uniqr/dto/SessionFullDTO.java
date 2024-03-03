@@ -12,35 +12,24 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SessionDTO {
+public class SessionFullDTO {
     private String id;
     private String name;
     private Long amount;
     private Date crated;
     private String desc;
-    private List<String> qrs;
+    private List<QrShortDTO> qrs;
 
-    public static Session mapToSession(SessionDTO sessionDTO) {
-        Date date = new Date();
+    public static SessionFullDTO mapToSessionDTO(Session session) {
+        List<QrShortDTO> qrsList = session.getQrs().stream().map(QrShortDTO::mapToQrShortDTO).toList();
 
-        return new Session(
-                sessionDTO.getName(),
-                sessionDTO.getAmount(),
-                date,
-                sessionDTO.getDesc()
-        );
-    }
-
-    public static SessionDTO mapToSessionDTO(Session session) {
-        List<String> collect = session.getQrs().stream().map(QR::getId).toList();
-
-        return new SessionDTO(
+        return new SessionFullDTO(
                 session.getId(),
                 session.getName(),
                 session.getAmountQRs(),
                 session.getCreated(),
                 session.getDesc(),
-                collect
+                qrsList
         );
     }
 }
