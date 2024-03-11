@@ -26,7 +26,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://uni-qr-db/uniqr
 
   pgadmin:
-    image: uni-dpage/pgadmin4:7
+    image: dpage/pgadmin4:7
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: dmitriy.s.stepanenko@gmail.com
