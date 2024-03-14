@@ -20,7 +20,6 @@ public class QrChecks {
     private String qr;
     @Column(name = "date")
     private Date date;
-
     public QrChecks(Date date) {
         this.date = date;
     }

@@ -1,6 +1,5 @@
 package com.uniqr.dto;
 
-import com.uniqr.model.QR;
 import com.uniqr.model.Session;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,10 +17,12 @@ public class SessionFullDTO {
     private Long amount;
     private Date crated;
     private String desc;
+    private String image;
     private List<QrShortDTO> qrs;
 
     public static SessionFullDTO mapToSessionDTO(Session session) {
         List<QrShortDTO> qrsList = session.getQrs().stream().map(QrShortDTO::mapToQrShortDTO).toList();
+        String imageURL = "http://45.77.60.247:8081/api/v1/images/" + session.getImage().getId();
 
         return new SessionFullDTO(
                 session.getId(),
@@ -29,6 +30,7 @@ public class SessionFullDTO {
                 session.getAmountQRs(),
                 session.getCreated(),
                 session.getDesc(),
+                imageURL,
                 qrsList
         );
     }

@@ -36,7 +36,6 @@ public class Client {
         if(sessions == null) {
             sessions = new ArrayList<>();
         }
-        System.out.println(this.id);
         session.setClient(this.id);
         sessions.add(session);
     }

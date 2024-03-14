@@ -30,17 +30,14 @@ public class ClientController {
         String domain = requestBody.get("domain");
 
         if (domain == null || domain.isEmpty()) {
-            // Обробка помилки, якщо 'domain' не було передано
-            return ResponseEntity.badRequest().body("Missing 'domain' parameter");
+            return ResponseEntity.badRequest().body("Missing domain parameter");
         }
 
         ClientDTO existingClient = clientService.getClientByDomain(domain);
         if (existingClient != null) {
-            // Якщо домен вже існує, повертаємо його дані
             return ResponseEntity.ok(existingClient);
         }
 
-        // Якщо домен не існує, створюємо новий запис
         ClientDTO newClient = clientService.createClient(domain);
         return ResponseEntity.ok(newClient.getId());
     }
@@ -51,11 +48,19 @@ public class ClientController {
     }
 
     @PostMapping("/{clientID}/createSession")
-    public ResponseEntity<SessionFullDTO> createSession(@PathVariable String clientID,
-                                                        @RequestParam(value = "image", required = false) MultipartFile image,
-                                                        @RequestParam Map<String, String> createSession) {
-        SessionFullDTO session = clientService.createSession(clientID, Session.fromMap(createSession));
-        return ResponseEntity.ok(session);
+    public ResponseEntity<?> crateSession(@PathVariable String clientID,
+                                                        @RequestParam(value = "image", required = false) MultipartFile file,
+                                                        @RequestParam Map<String, String> sessionRequestBody) {
+        String name = sessionRequestBody.get("name");
+        String qrAmount = sessionRequestBody.get("qrAmount");
+
+        if(name == null || qrAmount == null) {
+            return ResponseEntity.badRequest().body("Parameter name or qrAmount can not be null");
+        }
+        Session session = Session.fromMap(sessionRequestBody);
+
+        SessionFullDTO sessionDto = clientService.createSession(clientID, session, file);
+        return ResponseEntity.ok(sessionDto);
     }
 
     //TODO: добавить Пагинацию
@@ -65,7 +70,7 @@ public class ClientController {
     }
 
     @GetMapping("/{clientID}/getSessions/{id}")
-    public ResponseEntity<SessionDTO> getSessionsById(@PathVariable Long clientID, @PathVariable String id) {
+    public ResponseEntity<SessionDTO> getSessionsById(@PathVariable String clientID, @PathVariable String id) {
         return ResponseEntity.ok(sessionService.getSessionDTO(id));
     }
 }

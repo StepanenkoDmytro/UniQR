@@ -18,6 +18,7 @@ public class SessionDTO {
     private Long amount;
     private Date crated;
     private String desc;
+    private String imageURL;
     private List<String> qrs;
 
     public static Session mapToSession(SessionDTO sessionDTO) {
@@ -33,6 +34,7 @@ public class SessionDTO {
 
     public static SessionDTO mapToSessionDTO(Session session) {
         List<String> collect = session.getQrs().stream().map(QR::getId).toList();
+        String imageURL = "http://45.77.60.247:8081/api/v1/images/" + session.getImage().getId();
 
         return new SessionDTO(
                 session.getId(),
@@ -40,6 +42,7 @@ public class SessionDTO {
                 session.getAmountQRs(),
                 session.getCreated(),
                 session.getDesc(),
+                imageURL,
                 collect
         );
     }

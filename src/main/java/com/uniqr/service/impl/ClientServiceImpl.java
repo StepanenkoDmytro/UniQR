@@ -2,6 +2,7 @@ package com.uniqr.service.impl;
 
 import com.uniqr.dto.*;
 import com.uniqr.model.Client;
+import com.uniqr.model.Image;
 import com.uniqr.model.QR;
 import com.uniqr.model.Session;
 import com.uniqr.repository.ClientRepository;
@@ -10,7 +11,9 @@ import com.uniqr.service.ClientService;
 import com.uniqr.service.exception.ClientFetchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +45,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public SessionFullDTO createSession(String clientId, Session session) {
+    public SessionFullDTO createSession(String clientId, Session session, MultipartFile file) {
         Optional<Client> clientById = clientRepository.findById(clientId);
 
         if(clientById.isEmpty()) {
@@ -53,9 +56,20 @@ public class ClientServiceImpl implements ClientService {
         List<QR> generateQRs = generateQRs(session.getId(), session.getAmountQRs());
         session.setQrs(generateQRs);
 
+        if (file.getSize() != 0) {
+            try {
+                Image image = toImageEntity(file);
+                session.setImage(image);
+            } catch (IOException exp) {
+                //TODO: add logger
+                System.out.println("Some trouble with image file: " + exp);
+            }
+        }
+
         client.addSession(session);
 
         clientRepository.save(client);
+
         return SessionFullDTO.mapToSessionDTO(session);
     }
 
@@ -81,5 +95,15 @@ public class ClientServiceImpl implements ClientService {
             result.add(new QR(uuid));
         }
         return result;
+    }
+
+    private Image toImageEntity(MultipartFile file) throws IOException {
+        Image image = new Image();
+        image.setName(file.getName());
+        image.setSize(file.getSize());
+        image.setOriginFileName(file.getOriginalFilename());
+        image.setContentType(file.getContentType());
+        image.setBytes(file.getBytes());
+        return image;
     }
 }

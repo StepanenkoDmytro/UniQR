@@ -41,6 +41,11 @@
             <column name="client_id" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+
+            <column name="image_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
         </createTable>
     </changeSet>
 
@@ -102,4 +107,34 @@
                                  referencedTableName="qrs"/>
     </changeSet>
 
+    <changeSet id="1.0.7" author="dmytro.stepanenko">
+        <createTable tableName="images">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="image_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_origin_file_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_size" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_content_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bytes" type="BYTEA">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.8" author="dmytro.stepanenko">
+        <addForeignKeyConstraint baseColumnNames="image_id"
+                                 baseTableName="sessions"
+                                 constraintName="fk_images_session_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="images"/>
+    </changeSet>
 </databaseChangeLog>
