@@ -17,14 +17,16 @@ public class QrDTO {
     private String id;
     private Date created;
     private List<Date> dates;
+    private SessionDTO sessionDTO;
 
-    public static QrDTO mapToQrDTO(QR qr) {
+    public static QrDTO mapToQrDTO(QR qr, SessionDTO sessionDTO) {
         List<Date> dates = qr.getDates().stream().map(QrChecks::getDate).toList();
 
         return new QrDTO(
                 qr.getId(),
                 qr.getCreated(),
-                dates
+                dates,
+                sessionDTO
         );
     }
 }

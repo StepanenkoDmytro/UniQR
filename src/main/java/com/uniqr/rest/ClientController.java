@@ -26,7 +26,7 @@ public class ClientController {
     }
 
     @PostMapping("/createClient")
-    public ResponseEntity<?> createClient(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<String> createClient(@RequestBody Map<String, String> requestBody) {
         String domain = requestBody.get("domain");
 
         if (domain == null || domain.isEmpty()) {
@@ -35,7 +35,7 @@ public class ClientController {
 
         ClientDTO existingClient = clientService.getClientByDomain(domain);
         if (existingClient != null) {
-            return ResponseEntity.ok(existingClient);
+            return ResponseEntity.ok(existingClient.getId());
         }
 
         ClientDTO newClient = clientService.createClient(domain);

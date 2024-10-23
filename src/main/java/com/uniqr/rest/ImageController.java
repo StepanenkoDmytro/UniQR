@@ -24,7 +24,7 @@ public class ImageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getImageId(@PathVariable Long id) throws IOException {
+    public ResponseEntity<?> getImageId(@PathVariable String id) throws IOException {
 
         Image image = imageRepository.findById(id).orElseThrow(
                 () -> new ImageNotFoundException(String.format("Image with id = %d not found", id))

@@ -56,7 +56,7 @@ public class ClientServiceImpl implements ClientService {
         List<QR> generateQRs = generateQRs(session.getId(), session.getAmountQRs());
         session.setQrs(generateQRs);
 
-        if (file.getSize() != 0) {
+        if (file != null && file.getSize() != 0) {
             try {
                 Image image = toImageEntity(file);
                 session.setImage(image);
@@ -65,7 +65,6 @@ public class ClientServiceImpl implements ClientService {
                 System.out.println("Some trouble with image file: " + exp);
             }
         }
-
         client.addSession(session);
 
         clientRepository.save(client);

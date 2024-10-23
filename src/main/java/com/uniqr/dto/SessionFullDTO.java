@@ -15,14 +15,18 @@ public class SessionFullDTO {
     private String id;
     private String name;
     private Long amount;
-    private Date crated;
+    private Date created;
     private String desc;
     private String image;
+    private String clientDomain;
     private List<QrShortDTO> qrs;
 
     public static SessionFullDTO mapToSessionDTO(Session session) {
         List<QrShortDTO> qrsList = session.getQrs().stream().map(QrShortDTO::mapToQrShortDTO).toList();
-        String imageURL = "http://45.77.60.247:8081/api/v1/images/" + session.getImage().getId();
+        String imageURL = null;
+        if(session.getImage() != null) {
+            imageURL = "https://pegazzo.online:8081/api/v1/images/" + session.getImage().getId();
+        }
 
         return new SessionFullDTO(
                 session.getId(),
@@ -31,6 +35,7 @@ public class SessionFullDTO {
                 session.getCreated(),
                 session.getDesc(),
                 imageURL,
+                session.getClientDomain(),
                 qrsList
         );
     }

@@ -17,7 +17,7 @@ public class QRController {
         this.qrService = qrService;
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> checkQR(@PathVariable String id) {
         QrDTO qrDTO = qrService.checkQRById(id);
         return ResponseEntity.ok(qrDTO);

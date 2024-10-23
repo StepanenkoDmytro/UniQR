@@ -26,6 +26,8 @@ public class Session {
     private String desc;
     @Column(name = "client_id")
     private String client;
+    @Column(name = "client_domain")
+    private String clientDomain;
     @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
@@ -54,6 +56,18 @@ public class Session {
         session.setName(map.get("name"));
         session.setAmountQRs(Long.parseLong(map.get("qrAmount")));
         session.setCreated(new Date());
+        session.setDesc(getDescFromMap(map));
+
         return session;
+    }
+
+    private static String getDescFromMap(Map<String, String> map) {
+        StringBuilder descBuilder = new StringBuilder();
+        map.forEach((key, value) -> {
+            if (!key.equals("name") && !key.equals("qrAmount")) {
+                descBuilder.append(key).append(": ").append(value).append("; ");
+            }
+        });
+        return descBuilder.toString();
     }
 }

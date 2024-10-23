@@ -37,6 +37,7 @@ public class Client {
             sessions = new ArrayList<>();
         }
         session.setClient(this.id);
+        session.setClientDomain(this.domainClient);
         sessions.add(session);
     }
 }
